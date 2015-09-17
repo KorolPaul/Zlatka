@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Zlatka.Models.Article>
+
+@{
+    ViewBag.Title = "Категории";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Статьи</h2>
+<p>
+    @Html.ActionLink("Добавить", "AddCategory")
+</p>
+<table class="table-list">
+@foreach (var item in Model) {
+    <colgroup>
+        <col width="95%" />
+        <col width="5%" />
+    </colgroup>
+    <tr>
+        <td>
+            @Html.ActionLink(item.Title, "EditCategory", new { id = item.id })
+        </td>
+        <td>
+            @Html.ActionLink("✕", "DeleteArticle", new { id = item.id }, new { @class = "delete js-delete-category", id = item.id })
+        </td>
+    </tr>
+}
+</table>

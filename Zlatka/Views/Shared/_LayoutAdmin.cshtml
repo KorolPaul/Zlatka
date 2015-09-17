@@ -3,10 +3,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title</title>
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,400italic,700italic|Russo+One&subset=latin,cyrillic,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
     @Styles.Render("~/Content/admin.css")
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/Scripts/admin.js")
 </head>
 <body>
     <header class="header">
@@ -14,10 +15,9 @@
     </header>
     <div class="main-menu-wrapper">
         <nav class="main-menu">
-            <a class="main-menu_link" href="">Страницы</a>
-            <a class="main-menu_link" href="">Статьи</a>
-            <a class="main-menu_link" href=""></a>
-            <a class="main-menu_link" href=""></a>
+            @Html.ActionLink("Страницы", "Pages", null, new { @class = "main-menu_link" })
+            @Html.ActionLink("Статьи", "Articles", null, new  {@class = "main-menu_link"})
+            @Html.ActionLink("Категории", "Categories", null, new { @class = "main-menu_link" })
         </nav>
     </div>
     <div class="content">

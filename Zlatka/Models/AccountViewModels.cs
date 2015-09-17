@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Zlatka.Models
 {
-    public class ExternalLoginConfirmationViewModel
+    public class ManageAdminViewModel
     {
         [Required]
         [Display(Name = "Email")]

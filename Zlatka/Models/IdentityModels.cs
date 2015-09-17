@@ -29,5 +29,7 @@ namespace Zlatka.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<Zlatka.Models.Page> Articles { get; set; }
     }
 }

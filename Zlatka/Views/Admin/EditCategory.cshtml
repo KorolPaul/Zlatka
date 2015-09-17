@@ -1,0 +1,26 @@
+﻿@model Zlatka.Models.Article
+
+@{
+    ViewBag.Title = "Изменение категории";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Добавить категорию</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "form_error" })
+        <div class="form_group">
+            @Html.LabelFor(model => model.Title)
+            @Html.EditorFor(model => model.Title)
+            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "form_error" })
+        </div>
+
+        <div class="form_group">
+                <input type="submit" value="Добавить" />
+        </div>
+    </div>
+}
