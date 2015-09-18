@@ -182,7 +182,6 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdminContext.cs" />
-    <Compile Include="Models\ArticlesController.cs" />
     <Compile Include="Models\AdminClasses.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />

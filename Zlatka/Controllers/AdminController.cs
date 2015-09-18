@@ -24,12 +24,14 @@ namespace Zlatka.Controllers
         }
         public ActionResult AddArticle()
         {
+            ViewBag.Categories = from c in db.Categories select c.id;
             return View();
         }
 
         [HttpPost]
-        public ActionResult AddArticle([Bind(Include = "id,Title,Date,Content")] Article article)
+        public ActionResult AddArticle([Bind(Include = "id,Title,Date,Content,CategoryID")] Article article)
         {
+            ViewBag.Categories = from c in db.Categories select c.id;
             if (ModelState.IsValid)
             {
                 db.Articles.Add(article);
@@ -49,6 +51,7 @@ namespace Zlatka.Controllers
         [HttpPost]
         public ActionResult EditArticle([Bind(Include = "id,Title,Date,Content")] Article article)
         {
+            ViewBag.Categories = db.Categories.ToList();
             if (ModelState.IsValid)
             {
                 db.Entry(article).State = EntityState.Modified;

@@ -26,6 +26,14 @@
         </div>
 
         <div class="form_group">
+            @Html.LabelFor(model => model.CategoryID)
+            <select id="CategoryID" name="CategoryID" data-val-required="The Int32 field is required." data-val-number="The field Int32 must be a number." data-val="true">
+                <option value="2">1</option>
+                <option value="2">2</option>
+            </select>
+        </div>
+
+        <div class="form_group">
             @Html.LabelFor(model => model.Content)
             @Html.TextAreaFor(model => model.Content)
             @Html.ValidationMessageFor(model => model.Content, "", new { @class = "form_error" })

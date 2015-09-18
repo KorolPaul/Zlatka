@@ -1,13 +1,15 @@
 $(document).ready(function () {
 
-    $('.js-article-delete').click(function (e) {
+    $('.js-delete-article, .js-delete-category').click(function (e) {
         e.preventDefault();
+
         var flag = confirm('Are you sure?'), 
-            article = $(this).parent().parent();
+            article = $(this).parent().parent(), 
+            action = $(this).data('action');
 
         if (flag) {
             $.ajax({
-                url: '/Admin/DeleteArticle',
+                url: '/Admin/' + action,
                 type: 'POST',
                 data: { id: e.target.id },
                 dataType: 'json',

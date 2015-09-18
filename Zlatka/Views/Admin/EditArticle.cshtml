@@ -26,6 +26,16 @@
         </div>
 
         <div class="form_group">
+            @Html.LabelFor(model => model.Category)
+            <select id="Category" name="Category">
+                @foreach (var cat in ViewBag.Categories)
+                {
+                    <option value="@cat.id">@cat.Title</option>
+                }
+            </select>
+        </div>
+
+        <div class="form_group">
             @Html.LabelFor(model => model.Content)
             @Html.TextAreaFor(model => model.Content)
             @Html.ValidationMessageFor(model => model.Content, "", new { @class = "form_error" })
