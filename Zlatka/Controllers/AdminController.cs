@@ -24,14 +24,13 @@ namespace Zlatka.Controllers
         }
         public ActionResult AddArticle()
         {
-            ViewBag.Categories = from c in db.Categories select c.id;
+            ViewBag.CategoryID = SelectCategories();
             return View();
         }
 
         [HttpPost]
-        public ActionResult AddArticle([Bind(Include = "id,Title,Date,Content,CategoryID")] Article article)
+        public ActionResult AddArticle([Bind(Include = "id,Title,Date,Annotation,Content,CategoryID")] Article article)
         {
-            ViewBag.Categories = from c in db.Categories select c.id;
             if (ModelState.IsValid)
             {
                 db.Articles.Add(article);
@@ -45,13 +44,15 @@ namespace Zlatka.Controllers
         public ActionResult EditArticle(int id)
         {
             Article article = db.Articles.Find(id);
+            ViewBag.CategoryID = SelectCategories(article.CategoryID);
+
             return View(article);
         }
 
         [HttpPost]
-        public ActionResult EditArticle([Bind(Include = "id,Title,Date,Content")] Article article)
+        public ActionResult EditArticle([Bind(Include = "id,Title,Date,Annotation,Content,CategoryID")] Article article)
         {
-            ViewBag.Categories = db.Categories.ToList();
+            ViewBag.CategoryID = SelectCategories(article.CategoryID);
             if (ModelState.IsValid)
             {
                 db.Entry(article).State = EntityState.Modified;
@@ -69,6 +70,12 @@ namespace Zlatka.Controllers
             db.Articles.Remove(article);
             db.SaveChanges();
             return Json("Deleted");
+        }
+
+        public SelectList SelectArticles(int articleID = 0)
+        {
+            var articles = from c in db.Articles select c;
+            return new SelectList(articles, "id", "Title", articleID);
         }
         #endregion
 
@@ -119,6 +126,68 @@ namespace Zlatka.Controllers
         {
             Category category = db.Categories.Find(id);
             db.Categories.Remove(category);
+            db.SaveChanges();
+            return Json("Deleted");
+        }
+        
+        public SelectList SelectCategories(int categoryID = 0){
+            var categories = from c in db.Categories select c;
+            return new SelectList(categories, "id", "Title", categoryID);
+        }
+        #endregion
+
+        #region Pages
+        public ActionResult Pages()
+        {
+            return View(db.Pages.ToList());
+        }
+        public ActionResult AddPage()
+        {
+            ViewBag.CategoryID = SelectCategories();
+            ViewBag.ArticleID = SelectArticles();
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddPage([Bind(Include = "id,Title,Type,Url,ArticleID,CategoryID")] Page page)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Pages.Add(page);
+                db.SaveChanges();
+                return RedirectToAction("Pages");
+            }
+
+            return View(page);
+        }
+
+        public ActionResult EditPage(int id)
+        {
+            Page page = db.Pages.Find(id);
+            ViewBag.CategoryID = SelectCategories((int)page.CategoryID);
+            ViewBag.ArticleID = SelectArticles((int)page.ArticleID);
+
+            return View(page);
+        }
+
+        [HttpPost]
+        public ActionResult EditPage([Bind(Include = "id,Title,Type,Url,ArticleID,CategoryID")] Page page)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(page).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Pages");
+            }
+
+            return View(page);
+        }
+
+        [HttpPost]
+        public JsonResult DeletePage(int id)
+        {
+            Page page = db.Pages.Find(id);
+            db.Pages.Remove(page);
             db.SaveChanges();
             return Json("Deleted");
         }

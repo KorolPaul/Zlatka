@@ -1,0 +1,8 @@
+﻿@model IEnumerable<Zlatka.Models.Article>
+@{
+    ViewBag.Title = Model.Title;
+}
+
+<h1>@Model.Title</h1>
+
+@Html.Raw(HttpUtility.HtmlDecode(Model.Content))

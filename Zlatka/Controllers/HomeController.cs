@@ -3,28 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Zlatka.Models;
 
 namespace Zlatka.Controllers
 {
     public class HomeController : Controller
     {
+        private AdminContext db = new AdminContext();
+
         public ActionResult Index()
         {
-            return View();
+            return View(db.Articles.ToList());
         }
 
-        public ActionResult About()
+        public ActionResult ShowPage(string url)
         {
-            ViewBag.Message = "Your application description page.";
+            int pageId = (from p in db.Pages where p.Url == url select p.id).FirstOrDefault();
+            Article article = db.Articles.Find(pageId);
 
-            return View();
+            return View(article);
         }
 
-        public ActionResult Contact()
+        public ActionResult ShowMenu()
         {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            return View(db.Pages.ToList());
         }
     }
 }

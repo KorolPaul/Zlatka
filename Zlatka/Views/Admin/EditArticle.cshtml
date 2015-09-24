@@ -26,18 +26,18 @@
         </div>
 
         <div class="form_group">
-            @Html.LabelFor(model => model.Category)
-            <select id="Category" name="Category">
-                @foreach (var cat in ViewBag.Categories)
-                {
-                    <option value="@cat.id">@cat.Title</option>
-                }
-            </select>
+            @Html.LabelFor(model => model.CategoryID)
+            @Html.DropDownList("CategoryID", ViewBag.Categories as IEnumerable<SelectListItem>)
+        </div>
+
+        <div class="form_group">
+            @Html.LabelFor(model => model.Annotation)
+            @Html.TextAreaFor(model => model.Annotation)
         </div>
 
         <div class="form_group">
             @Html.LabelFor(model => model.Content)
-            @Html.TextAreaFor(model => model.Content)
+            @Html.TextAreaFor(model => model.Content, new { @class = "js-textarea" })
             @Html.ValidationMessageFor(model => model.Content, "", new { @class = "form_error" })
         </div>
 

@@ -1,0 +1,10 @@
+﻿@model IEnumerable<Zlatka.Models.Page>
+@{
+    Layout = null;
+}
+<nav class="menu">
+    @foreach (var item in Model)
+    {
+        @Html.ActionLink(item.Title, "ShowPage", "Home",  new { url = item.Url }, null)
+    }
+</nav>

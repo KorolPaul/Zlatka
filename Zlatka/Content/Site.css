@@ -5,7 +5,58 @@ body {
     min-height: 100%;
     margin: 0;
     padding: 0;
+    background: rgba(53, 93, 128, .5);
 }
+
+.color1 {
+    background: rgb(93, 176, 191);
+}
+.color2 {
+    background: rgb(53, 93, 128);
+}
+.color3 {
+    background: rgb(255, 76, 54);
+}
+.color4 {
+    background: rgb(64, 64, 64);
+}
+.color5 {
+    background: rgb(230, 226, 77);
+}
+
+.left {
+    float: left;
+}
+.right {
+    float: right;
+}
+
+/*Navigation*/
+.navigation {
+    margin: auto;
+    padding: 5px 0;
+    width: 1300px;
+    overflow: hidden;
+}
+
+/*Content*/
+.content {
+    background: #fff;
+    margin: 100px auto 50px;
+    padding: 20px 50px;
+    width: 1200px;
+}
+
+
+/*Footer*/
+.footer {
+    margin: auto;
+    padding: 20px 50px;
+    width: 1200px;
+}
+
+
+
 
 /*Authentification*/
 .content-center {

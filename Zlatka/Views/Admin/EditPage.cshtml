@@ -1,0 +1,44 @@
+﻿@model Zlatka.Models.Page
+
+@{
+    ViewBag.Title = "Add Page";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Добавить страницу</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "form_error" })
+        <div class="form_group">
+            @Html.LabelFor(model => model.Title)
+            @Html.EditorFor(model => model.Title)
+            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "form_error" })
+        </div>
+        <div class="form_group">
+            @Html.LabelFor(model => model.Url)
+            @Html.EditorFor(model => model.Url)
+        </div>
+        <div class="form_group">
+            @Html.LabelFor(model => model.Type)
+            @Html.DropDownList("Type", EnumHelper.GetSelectList(typeof(Zlatka.Models.PageTypes)))
+        </div>
+
+        <div class="form_group">
+            @Html.LabelFor(model => model.CategoryID)
+            @Html.DropDownList("CategoryID", ViewBag.CategoryID as IEnumerable<SelectListItem>)
+        </div>
+
+        <div class="form_group">
+            @Html.LabelFor(model => model.ArticleID)
+            @Html.DropDownList("ArticleID", ViewBag.ArticleID as IEnumerable<SelectListItem>)
+        </div>
+
+        <div class="form_group">
+            <input type="submit" value="Сохранить" />
+        </div>
+    </div>
+}

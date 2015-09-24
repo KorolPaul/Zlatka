@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace Zlatka.Models
 {
@@ -9,6 +10,7 @@ namespace Zlatka.Models
         public int id { get; set; }
         public string Title { get; set; }
         public virtual ICollection<Article> Articles { get; set; }
+        public virtual ICollection<Page> Pages { get; set; }
     }
 
     public class Article
@@ -16,10 +18,12 @@ namespace Zlatka.Models
         public int id { get; set; }
         public string Title { get; set; }
         public DateTime Date { get; set; }
+        public string Annotation { get; set; }
+        [AllowHtml] 
         public string Content { get; set; }
-
-        public int CategoryID;
-        public Category Category;
+        public int CategoryID { get; set; }
+        public virtual Category Category { get; set; }
+        public virtual ICollection<Page> Pages { get; set; }
     }
 
 
@@ -28,8 +32,11 @@ namespace Zlatka.Models
         public int id { get; set; }
         public string Title { get; set; }
         public PageTypes Type { get; set; }
-        public string Article { get; set; }
-        public string Category { get; set; }
+        public string Url { get; set; }
+        public int? ArticleID { get; set; }
+        public virtual Article Article { get; set; }
+        public int? CategoryID { get; set; }
+        public virtual Category Category { get; set; }
     }
 
     public enum PageTypes

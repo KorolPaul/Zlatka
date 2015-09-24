@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Zlatka.Models.Page>
+
+@{
+    ViewBag.Title = "Страницы";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Страницы</h2>
+<p>
+    @Html.ActionLink("Добавить", "AddPage")
+</p>
+<table class="table-list">
+@foreach (var item in Model) {
+    <colgroup>
+        <col width="95%" />
+        <col width="5%" />
+    </colgroup>
+    <tr>
+        <td>
+            @Html.ActionLink(item.Title, "EditPage", new { id = item.id })
+        </td>
+        <td>
+            @Html.ActionLink("✕", "DeletePage", new { id = item.id }, new { @class = "delete js-delete-page", id = item.id, @data_action = "DeletePage" })
+        </td>
+    </tr>
+}
+</table>
