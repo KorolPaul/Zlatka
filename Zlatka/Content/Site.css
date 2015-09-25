@@ -39,10 +39,23 @@ body {
     overflow: hidden;
 }
 
+/*Menu*/
+.menu {
+    background: rgba(53, 93, 128, .3);
+    margin: 100px auto 0;
+    width: 1300px;
+    overflow: hidden;
+}
+.menu a {
+    display:  inline-block;
+    padding: 10px 15px;
+    color: #fff;
+}
+
 /*Content*/
 .content {
     background: #fff;
-    margin: 100px auto 50px;
+    margin: 0 auto 50px;
     padding: 20px 50px;
     width: 1200px;
 }

@@ -1,8 +1,13 @@
 ﻿@model IEnumerable<Zlatka.Models.Article>
-@{
-    ViewBag.Title = Model.Title;
+
+
+<h1>@ViewBag.Title</h1>
+
+@foreach (var item in Model)
+{
+    <div class="post">
+        <h2>@item.Title</h2>
+        @Html.Raw(HttpUtility.HtmlDecode(item.Annotation))
+        @Html.ActionLink("Подробнее", "ShowPage", "Home", new { url = item.id }, null)
+    </div>
 }
-
-<h1>@Model.Title</h1>
-
-@Html.Raw(HttpUtility.HtmlDecode(Model.Content))
