@@ -19,10 +19,6 @@
             @Html.ValidationMessageFor(model => model.Title, "", new { @class = "form_error" })
         </div>
         <div class="form_group">
-            @Html.LabelFor(model => model.Url)
-            @Html.EditorFor(model => model.Url)
-        </div>
-        <div class="form_group">
             @Html.LabelFor(model => model.Type)
             @Html.DropDownList("Type", EnumHelper.GetSelectList(typeof(Zlatka.Models.PageTypes)))
         </div>

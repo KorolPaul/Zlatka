@@ -18,14 +18,14 @@ namespace Zlatka.Controllers
 
         public ActionResult ShowPage(string url)
         {
-            int pageId = (from p in db.Pages where p.Url == url select p.id).FirstOrDefault();
+            int pageId = (from p in db.Articles where p.Url == url select p.id).FirstOrDefault();
 
             return View(db.Articles.Find(pageId));
         }
 
         public ActionResult ShowCategory(string url)
         {
-            Page cat = (from p in db.Pages where p.Url == url select p).FirstOrDefault();
+            Category cat = (from p in db.Categories where p.Url == url select p).FirstOrDefault();
             var pages = (from p in db.Articles where p.CategoryID == cat.id select p).ToList();
             ViewBag.Title = cat.Title;
 

@@ -18,7 +18,10 @@
             @Html.EditorFor(model => model.Title)
             @Html.ValidationMessageFor(model => model.Title, "", new { @class = "form_error" })
         </div>
-
+        <div class="form_group">
+            @Html.LabelFor(model => model.Url)
+            @Html.EditorFor(model => model.Url)
+        </div>
         <div class="form_group">
                 <input type="submit" value="Добавить" />
         </div>

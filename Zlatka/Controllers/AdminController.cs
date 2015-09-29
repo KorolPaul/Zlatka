@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -29,10 +30,12 @@ namespace Zlatka.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddArticle([Bind(Include = "id,Title,Date,Annotation,Content,CategoryID")] Article article)
+        public ActionResult AddArticle([Bind(Include = "id,Title,Date,Annotation,Content,CategoryID")] Article article, HttpPostedFileBase image)
         {
             if (ModelState.IsValid)
             {
+                SaveImage(image);
+                article.Image = image.FileName;
                 db.Articles.Add(article);
                 db.SaveChanges();
                 return RedirectToAction("Articles");
@@ -44,15 +47,15 @@ namespace Zlatka.Controllers
         public ActionResult EditArticle(int id)
         {
             Article article = db.Articles.Find(id);
-            ViewBag.CategoryID = SelectCategories(article.CategoryID);
+            ViewBag.CategoryID = SelectCategories((int)article.CategoryID);
 
             return View(article);
         }
 
         [HttpPost]
-        public ActionResult EditArticle([Bind(Include = "id,Title,Date,Annotation,Content,CategoryID")] Article article)
+        public ActionResult EditArticle([Bind(Include = "id,Title,Date,Annotation,Content,CategoryID")] Article article, HttpPostedFileBase image)
         {
-            ViewBag.CategoryID = SelectCategories(article.CategoryID);
+            ViewBag.CategoryID = SelectCategories((int)article.CategoryID);
             if (ModelState.IsValid)
             {
                 db.Entry(article).State = EntityState.Modified;
@@ -192,5 +195,35 @@ namespace Zlatka.Controllers
             return Json("Deleted");
         }
         #endregion
+
+        public void SaveImage(HttpPostedFileBase image)
+        {
+            if (image != null && image.ContentLength > 0)
+            {
+                var ext = Path.GetExtension(image.FileName);
+                var path = Server.MapPath("~/Content/Images");
+                var file = Path.Combine(path, image.FileName);
+                var tmp = Path.GetTempFileName() + "." + ext;
+
+                try
+                {
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+
+                    if (System.IO.File.Exists(file))
+                    {
+                        System.IO.File.Move(file, file.Replace(".jpg", DateTime.Now.ToString("yyyyMMdd_hhmmss") + ".jpg"));
+                    }
+
+                    image.SaveAs(file);
+                }
+                catch (Exception e)
+                {
+                    throw new HttpException(400, e.Message);
+                }
+            }
+        }
     }
 }
