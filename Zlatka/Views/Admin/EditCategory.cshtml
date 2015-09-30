@@ -5,9 +5,9 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>Добавить категорию</h2>
+<h2>Изменить категорию</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("EditCategory", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     
@@ -23,7 +23,13 @@
             @Html.EditorFor(model => model.Url)
         </div>
         <div class="form_group">
-                <input type="submit" value="Добавить" />
+            @Html.LabelFor(model => model.Image)
+            <img src="../../content/images/@Model.Image" alt="old image" />
+            <input type="hidden" value="@Model.Image" id="oldImage" name="oldImage" />
+            <input type="file" id="Image" name="Image" />
+        </div>
+        <div class="form_group">
+                <input type="submit" value="Сохранить" />
         </div>
     </div>
 }

@@ -7,7 +7,7 @@
 
 <h2>Добавление статьи</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("EditArticle", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     
@@ -29,7 +29,8 @@
         </div>
         <div class="form_group">
             @Html.LabelFor(model => model.Image)
-            <img src="" alt="" />
+            <img src="../../content/images/@Model.Image" alt="old image" />
+            <input type="hidden" value="@Model.Image" id="oldImage" name="oldImage" />
             <input type="file" id="Image" name="Image" />
         </div>
         <div class="form_group">
@@ -46,7 +47,7 @@
             @Html.ValidationMessageFor(model => model.Content, "", new { @class = "form_error" })
         </div>
         <div class="form_group">
-                <input type="submit" value="Create" />
+                <input type="submit" value="Сохранить" />
         </div>
     </div>
 }

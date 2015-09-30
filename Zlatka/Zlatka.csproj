@@ -181,6 +181,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\TrainingContext.cs" />
+    <Compile Include="Models\TrainingClasses.cs" />
     <Compile Include="Models\AdminContext.cs" />
     <Compile Include="Models\AdminClasses.cs" />
     <Compile Include="Models\AccountViewModels.cs" />

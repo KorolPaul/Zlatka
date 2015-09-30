@@ -15,7 +15,7 @@
         @Html.Partial("_LoginPartial")
     </div>
     <header class="header">
-        {Html.RenderAction("ShowMenu"); }
+        @{Html.RenderAction("ShowMenu"); }
     </header>
     <div class="content">
         @RenderBody()

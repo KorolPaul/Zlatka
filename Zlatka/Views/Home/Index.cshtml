@@ -8,6 +8,6 @@
 {
     <div class="post">
         @Html.Raw(HttpUtility.HtmlDecode(item.Annotation))
-        @Html.ActionLink("Подробнее", "ShowPage", new { id = item.id })
+        @Html.ActionLink("Подробнее", "ShowPage", "Home", new { url = item.Url }, null)
     </div>
 }

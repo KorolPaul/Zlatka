@@ -30,12 +30,16 @@ namespace Zlatka.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddArticle([Bind(Include = "id,Title,Date,Annotation,Content,CategoryID")] Article article, HttpPostedFileBase image)
+        public ActionResult AddArticle([Bind(Include = "id,Title,Date,Annotation,Content,CategoryID,Url")] Article article, HttpPostedFileBase image)
         {
             if (ModelState.IsValid)
             {
-                SaveImage(image);
-                article.Image = image.FileName;
+                if (image != null)
+                {
+                    SaveImage(image);
+                    article.Image = image.FileName;
+                }
+                
                 db.Articles.Add(article);
                 db.SaveChanges();
                 return RedirectToAction("Articles");
@@ -53,11 +57,21 @@ namespace Zlatka.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditArticle([Bind(Include = "id,Title,Date,Annotation,Content,CategoryID")] Article article, HttpPostedFileBase image)
+        public ActionResult EditArticle([Bind(Include = "id,Title,Date,Annotation,Content,CategoryID,Url")] Article article, HttpPostedFileBase image, string oldImage)
         {
             ViewBag.CategoryID = SelectCategories((int)article.CategoryID);
             if (ModelState.IsValid)
             {
+                if (image != null && article.Image != image.FileName)
+                {
+                    SaveImage(image);
+                    article.Image = image.FileName;
+                }
+                else
+                {
+                    article.Image = oldImage;
+                }
+
                 db.Entry(article).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Articles");
@@ -93,10 +107,16 @@ namespace Zlatka.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddCategory([Bind(Include = "id,Title")] Category category)
+        public ActionResult AddCategory([Bind(Include = "id,Title,Url")] Category category, HttpPostedFileBase image)
         {
             if (ModelState.IsValid)
             {
+                if (image != null)
+                {
+                    SaveImage(image);
+                    category.Image = image.FileName;
+                }
+                
                 db.Categories.Add(category);
                 db.SaveChanges();
                 return RedirectToAction("Categories");
@@ -112,10 +132,20 @@ namespace Zlatka.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditCategory([Bind(Include = "id,Title")] Category category)
+        public ActionResult EditCategory([Bind(Include = "id,Title,Url")] Category category, HttpPostedFileBase image, string oldImage)
         {
             if (ModelState.IsValid)
             {
+                if (image != null && category.Image != image.FileName)
+                {
+                    SaveImage(image);
+                    category.Image = image.FileName;
+                }
+                else
+                {
+                    category.Image = oldImage;
+                }
+
                 db.Entry(category).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Categories");
@@ -156,6 +186,8 @@ namespace Zlatka.Controllers
         {
             if (ModelState.IsValid)
             {
+                page.Url = SaveUrl((int)page.ArticleID, (int)page.CategoryID, page.Type);
+
                 db.Pages.Add(page);
                 db.SaveChanges();
                 return RedirectToAction("Pages");
@@ -178,6 +210,8 @@ namespace Zlatka.Controllers
         {
             if (ModelState.IsValid)
             {
+                page.Url = SaveUrl((int)page.ArticleID, (int)page.CategoryID, page.Type);
+
                 db.Entry(page).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Pages");
@@ -223,7 +257,25 @@ namespace Zlatka.Controllers
                 {
                     throw new HttpException(400, e.Message);
                 }
+                finally
+                {
+                    System.IO.File.Delete(tmp);
+                }
             }
+        }
+
+        public string SaveUrl(int articleId, int categoryId, PageTypes type)
+        {
+            if (type == PageTypes.SinglePage)
+            {
+                return (from art in db.Articles where art.id == articleId select art.Url).FirstOrDefault();
+            }
+            else if (type == PageTypes.Blog)
+            {
+                return (from cat in db.Categories where cat.id == categoryId select cat.Url).FirstOrDefault();
+            }
+
+            return "";
         }
     }
 }
