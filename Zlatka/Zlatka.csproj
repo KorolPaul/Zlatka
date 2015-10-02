@@ -258,6 +258,8 @@
     <Content Include="Views\Home\ShowPage.cshtml" />
     <Content Include="Views\Home\ShowCategory.cshtml" />
     <Content Include="Views\Home\ShowMenu.cshtml" />
+    <Content Include="Views\Admin\Users.cshtml" />
+    <Content Include="Views\Admin\EditUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using Zlatka.Models;
 
 namespace Zlatka.Controllers
@@ -225,6 +226,81 @@ namespace Zlatka.Controllers
         {
             Page page = db.Pages.Find(id);
             db.Pages.Remove(page);
+            db.SaveChanges();
+            return Json("Deleted");
+        }
+        #endregion
+
+        #region Users
+        public ActionResult Users()
+        {
+            var appdb = new ApplicationDbContext();
+
+            ViewBag.Users = appdb.Users.ToList();
+            return View();
+        }
+        public ActionResult AddUser()
+        {
+            ViewBag.CategoryID = SelectCategories();
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddUser([Bind(Include = "id,Title,Date,Annotation,Content,CategoryID,Url")] Article article, HttpPostedFileBase image)
+        {
+            if (ModelState.IsValid)
+            {
+                if (image != null)
+                {
+                    SaveImage(image);
+                    article.Image = image.FileName;
+                }
+
+                db.Articles.Add(article);
+                db.SaveChanges();
+                return RedirectToAction("Articles");
+            }
+
+            return View(article);
+        }
+
+        public ActionResult EditUser(int id)
+        {
+            Article article = db.Articles.Find(id);
+            ViewBag.CategoryID = SelectCategories((int)article.CategoryID);
+
+            return View(article);
+        }
+
+        [HttpPost]
+        public ActionResult EditUser([Bind(Include = "id,Title,Date,Annotation,Content,CategoryID,Url")] Article article, HttpPostedFileBase image, string oldImage)
+        {
+            ViewBag.CategoryID = SelectCategories((int)article.CategoryID);
+            if (ModelState.IsValid)
+            {
+                if (image != null && article.Image != image.FileName)
+                {
+                    SaveImage(image);
+                    article.Image = image.FileName;
+                }
+                else
+                {
+                    article.Image = oldImage;
+                }
+
+                db.Entry(article).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Articles");
+            }
+
+            return View(article);
+        }
+
+        [HttpPost]
+        public JsonResult DeleteUser(int id)
+        {
+            Article article = db.Articles.Find(id);
+            db.Articles.Remove(article);
             db.SaveChanges();
             return Json("Deleted");
         }
