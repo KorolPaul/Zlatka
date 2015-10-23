@@ -24,7 +24,7 @@
             @Html.DisplayFor(modelItem => item.Date)
         </td>
         <td>
-            @Html.ActionLink("✕", "DeleteArticle", new { id = item.id }, new { @class = "delete js-delete-article", id = item.id, @data_action = "DeleteArticle"})
+            @Html.ActionLink("✕", "DeleteArticle", new { id = item.id }, new { @class = "delete js-delete", id = item.id, @data_action = "DeleteArticle"})
         </td>
     </tr>
 }

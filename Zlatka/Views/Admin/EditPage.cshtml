@@ -11,7 +11,7 @@
 {
     @Html.AntiForgeryToken()
     
-    <div class="form-horizontal">
+    <div class="form_left">
         @Html.ValidationSummary(true, "", new { @class = "form_error" })
         <div class="form_group">
             @Html.LabelFor(model => model.Title)
@@ -20,21 +20,32 @@
         </div>
         <div class="form_group">
             @Html.LabelFor(model => model.Type)
-            @Html.DropDownList("Type", EnumHelper.GetSelectList(typeof(Zlatka.Models.PageTypes)))
+            @Html.DropDownList("Type", EnumHelper.GetSelectList(typeof(Zlatka.Models.PageTypes)), new { @class = "js-tab-select" })
         </div>
 
-        <div class="form_group">
+        <div class="form_group js-tab" id="tab-2" style="display: none">
+            @Html.LabelFor(model => model.ArticleID)
+            @Html.DropDownList("ArticleID", ViewBag.ArticleID as IEnumerable<SelectListItem>)
+        </div>
+
+        <div class="form_group js-tab" id="tab-1">
             @Html.LabelFor(model => model.CategoryID)
             @Html.DropDownList("CategoryID", ViewBag.CategoryID as IEnumerable<SelectListItem>)
         </div>
 
         <div class="form_group">
-            @Html.LabelFor(model => model.ArticleID)
-            @Html.DropDownList("ArticleID", ViewBag.ArticleID as IEnumerable<SelectListItem>)
+            <input type="submit" value="Сохранить" />
+        </div>
+    </div>
+    <div class="form_right">
+        <div class="form_group">
+            @Html.LabelFor(model => model.Keywords)
+            @Html.TextAreaFor(model => model.Keywords)
         </div>
 
         <div class="form_group">
-            <input type="submit" value="Сохранить" />
+            @Html.LabelFor(model => model.Description)
+            @Html.TextAreaFor(model => model.Description)
         </div>
     </div>
 }

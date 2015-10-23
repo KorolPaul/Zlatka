@@ -3,13 +3,10 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>Статьи</h2>
-<p>
-    @Html.ActionLink("Добавить", "AddUser")
-</p>
+<h2>Пользователи</h2>
 <table class="table-list">
 @foreach (var item in ViewBag.Users) {
-    var roles = Roles.GetRolesForUser(item.UserName);
+    //var roles = Roles.GetRolesForUser(item.UserName);
     
     <colgroup>
         <col width="80%" />
@@ -21,14 +18,33 @@
             @Html.ActionLink((string)item.UserName, "EditUser", new { id = item.Id })
         </td>
         <td>
-            @foreach (var role in roles)
-            {
-                <span>@role</span>
-            }
+
         </td>
         <td>
-            @Html.ActionLink("✕", "Deleteuser", new { id = item.Id }, new { @class = "delete js-delete-user", id = item.Id, @data_action = "DeleteArticle"})
+            @Html.ActionLink("✕", "DeleteUser", new { id = item.Id }, new { @class = "delete js-delete", id = item.Id, @data_action = "DeleteUser"})
         </td>
     </tr>
 }
+</table>
+
+<h2>Роли</h2>
+<p>
+    @Html.ActionLink("Добавить", "AddRole")
+</p>
+<table class="table-list">
+    @foreach (var item in ViewBag.Roles)
+    {
+        <colgroup>
+            <col width="95%" />
+            <col width="5%" />
+        </colgroup>
+        <tr>
+            <td>
+                @Html.ActionLink((string)item.Name, "EditRole", new { id = item.Id })
+            </td>
+            <td>
+                @Html.ActionLink("✕", "DeleteRole", new { id = item.Id }, new { @class = "delete js-delete", id = item.Id, @data_action = "DeleteRole" })
+            </td>
+        </tr>
+    }
 </table>

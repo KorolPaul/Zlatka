@@ -38,12 +38,25 @@ a:hover {
 
 /*Form elements*/
 .form {
-    width: 30%;
-    margin: auto;
+    overflow: hidden;
 }
 .form_group {
     position: relative;
     padding: 0 0 35px;
+}
+.form_left {
+    float: left;
+    width: 75%;
+}
+.form_right {
+    background: rgba(53, 93, 128, .2);
+    float: right;
+    padding: 10px 15px;
+    width: 20%;
+}
+.form__center {
+    width: 30%;
+    margin: auto;
 }
 label {
     display: block;
@@ -51,6 +64,8 @@ label {
 input[type="text"], 
 input[type="password"], 
 input[type="datetime"] {
+    font: 12px 'Roboto Condensed', sans-serif;
+    box-sizing: border-box;
     font-size: 30px;
     padding: 5px 10px;
     border: 1px solid #808080;
@@ -64,12 +79,14 @@ input[type="datetime"]:focus {
     box-shadow: 0 0 5px rgba(0, 0, 0, .5);
 }
 textarea {
+    font: 12px 'Roboto Condensed', sans-serif;
+    box-sizing: border-box;
     font-size: 30px;
     padding: 5px 10px;
     border: 1px solid #808080;
     transition: .2s ease all;
     resize: none;
-    height: 300px;
+    height: 200px;
     width: 100%;
 }
 textarea:focus {
@@ -90,7 +107,9 @@ input[type="submit"]{
     left: 0;
     bottom: 10px;
 }
-
+.validation-summary-errors {
+    position: static;
+}
 
 /*HEADER*/
 .header {

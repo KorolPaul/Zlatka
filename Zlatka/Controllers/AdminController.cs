@@ -7,13 +7,17 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Zlatka.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace Zlatka.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private AdminContext db = new AdminContext();
-
+        private ApplicationDbContext appdb = new ApplicationDbContext();
         public ActionResult Index()
         {
             return View();
@@ -183,7 +187,7 @@ namespace Zlatka.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddPage([Bind(Include = "id,Title,Type,Url,ArticleID,CategoryID")] Page page)
+        public ActionResult AddPage([Bind(Include = "id,Title,Type,Url,ArticleID,CategoryID,Keywords,Description")] Page page)
         {
             if (ModelState.IsValid)
             {
@@ -226,81 +230,6 @@ namespace Zlatka.Controllers
         {
             Page page = db.Pages.Find(id);
             db.Pages.Remove(page);
-            db.SaveChanges();
-            return Json("Deleted");
-        }
-        #endregion
-
-        #region Users
-        public ActionResult Users()
-        {
-            var appdb = new ApplicationDbContext();
-
-            ViewBag.Users = appdb.Users.ToList();
-            return View();
-        }
-        public ActionResult AddUser()
-        {
-            ViewBag.CategoryID = SelectCategories();
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult AddUser([Bind(Include = "id,Title,Date,Annotation,Content,CategoryID,Url")] Article article, HttpPostedFileBase image)
-        {
-            if (ModelState.IsValid)
-            {
-                if (image != null)
-                {
-                    SaveImage(image);
-                    article.Image = image.FileName;
-                }
-
-                db.Articles.Add(article);
-                db.SaveChanges();
-                return RedirectToAction("Articles");
-            }
-
-            return View(article);
-        }
-
-        public ActionResult EditUser(int id)
-        {
-            Article article = db.Articles.Find(id);
-            ViewBag.CategoryID = SelectCategories((int)article.CategoryID);
-
-            return View(article);
-        }
-
-        [HttpPost]
-        public ActionResult EditUser([Bind(Include = "id,Title,Date,Annotation,Content,CategoryID,Url")] Article article, HttpPostedFileBase image, string oldImage)
-        {
-            ViewBag.CategoryID = SelectCategories((int)article.CategoryID);
-            if (ModelState.IsValid)
-            {
-                if (image != null && article.Image != image.FileName)
-                {
-                    SaveImage(image);
-                    article.Image = image.FileName;
-                }
-                else
-                {
-                    article.Image = oldImage;
-                }
-
-                db.Entry(article).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Articles");
-            }
-
-            return View(article);
-        }
-
-        [HttpPost]
-        public JsonResult DeleteUser(int id)
-        {
-            Article article = db.Articles.Find(id);
-            db.Articles.Remove(article);
             db.SaveChanges();
             return Json("Deleted");
         }
@@ -353,5 +282,98 @@ namespace Zlatka.Controllers
 
             return "";
         }
+
+        #region Users
+        public ActionResult Users()
+        {
+            ViewBag.Users = appdb.Users.ToList();
+            ViewBag.Roles = appdb.Roles.ToList();
+            return View();
+        }
+
+        public ActionResult EditUser(string id)
+        {
+            var user = appdb.Users.Find(id);
+            var account = new AccountController(HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>());
+            var r = user.Roles.FirstOrDefault().RoleId;
+
+            var t = user.Roles.FirstOrDefault().RoleId;
+
+            SelectList list = new SelectList(appdb.Roles.ToList(), "Id", "Name", "b6b07703-f763-400a-9020-65d91e17a32f");
+            ViewBag.Roles = list;
+
+            return View(user);
+        }
+
+        [HttpPost]
+        public ActionResult EditUser([Bind(Include = "Id,Email")] ApplicationUser user, FormCollection collection)
+        {
+            if (ModelState.IsValid)
+            {
+                appdb.Entry(user).Entity.UserName = user.Email;
+                var account = new AccountController(HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>());
+                var role = appdb.Roles.Find(collection["Roles"]);
+
+                if(!account.UserManager.IsInRole(user.Id, role.Name)) {
+                    if (account.UserManager.GetRoles(user.Id).Count > 0)
+                    {
+                        account.UserManager.RemoveFromRole(user.Id, account.UserManager.GetRoles(user.Id).FirstOrDefault());
+                    }
+                    account.UserManager.AddToRole(user.Id, role.Name);
+                }
+                
+                appdb.Entry(user).State = EntityState.Modified;
+                appdb.SaveChanges();
+
+                return RedirectToAction("Users");
+            }
+
+            return View(user);
+        }
+        #endregion
+
+        #region Roles
+        public ActionResult AddRole(string id)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddRole(FormCollection collection)
+        {
+            appdb.Roles.Add(new IdentityRole() { Name = collection["RoleName"] });
+            appdb.SaveChanges();
+
+            return RedirectToAction("Users");
+        }
+
+        public ActionResult EditRole(string id)
+        {
+            var role = appdb.Roles.Find(id);
+            return View(role);
+        }
+
+        [HttpPost]
+        public ActionResult EditRole([Bind(Include = "Id,Name")] IdentityRole role)
+        {
+            if (ModelState.IsValid)
+            {
+                appdb.Entry(role).State = EntityState.Modified;
+                appdb.SaveChanges();
+                return RedirectToAction("Users");
+            }
+
+            return View(role);
+        }
+
+        [HttpPost]
+        public JsonResult DeleteRole(string id)
+        {
+            var role = appdb.Roles.Find(id);
+            appdb.Roles.Remove(role);
+            appdb.SaveChanges();
+            return Json("Deleted");
+        }
+        #endregion
     }
 }

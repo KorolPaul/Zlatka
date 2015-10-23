@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Zlatka.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Owin;
 
 namespace Zlatka.Controllers
 {
@@ -17,16 +19,36 @@ namespace Zlatka.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationRoleManager _roleManager;
 
         public AccountController()
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager m)
+        {
+            _userManager = m;
+        }
+
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager roleManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            RoleManager = roleManager;
         }
+
+         
+         public ApplicationRoleManager RoleManager
+         {
+                get
+                {
+                    return _roleManager ?? HttpContext.GetOwinContext().Get<ApplicationRoleManager>();
+                }
+                private set
+                {
+                    _roleManager = value;
+                }
+         }
 
         public ApplicationSignInManager SignInManager
         {

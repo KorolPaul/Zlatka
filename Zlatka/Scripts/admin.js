@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    $('.js-delete-article, .js-delete-category').click(function (e) {
+    $('.js-delete').click(function (e) {
         e.preventDefault();
 
         var flag = confirm('Are you sure?'), 
@@ -24,6 +24,13 @@ $(document).ready(function () {
 
     tinymce.init({
         selector: '.js-textarea'
+    });
+
+    $('.js-tab-select').change(function () {
+        var i = $(this)[0].selectedIndex + 1;
+
+        $('.js-tab').hide();
+        $('#tab-' + i).show();
     });
 
 });

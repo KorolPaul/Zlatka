@@ -20,7 +20,7 @@
             @Html.ActionLink(item.Title, "EditPage", new { id = item.id })
         </td>
         <td>
-            @Html.ActionLink("✕", "DeletePage", new { id = item.id }, new { @class = "delete js-delete-page", id = item.id, @data_action = "DeletePage" })
+            @Html.ActionLink("✕", "DeletePage", new { id = item.id }, new { @class = "delete js-delete", id = item.id, @data_action = "DeletePage" })
         </td>
     </tr>
 }

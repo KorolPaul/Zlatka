@@ -8,14 +8,15 @@
     @Scripts.Render("~/bundles/jquery")
 </head>
 <body>
-    <div class="navigation">
-        <nav class="left">
-            @Html.ActionLink("Home", "Index", "Home")
-        </nav>
-        @Html.Partial("_LoginPartial")
-    </div>
     <header class="header">
-        @{Html.RenderAction("ShowMenu"); }
+        <div class="navigation">
+            <nav class="left">
+                @{Html.RenderAction("ShowMenu"); }
+            </nav>
+            @Html.Partial("_LoginPartial")
+        </div>
+        <a class="logo" href="/">Muscles.by</a>
+        
     </header>
     <div class="content">
         @RenderBody()
