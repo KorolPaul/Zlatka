@@ -17,7 +17,8 @@
         @Html.EditorFor(model => model.Email)
     </div>
     <div class="form_group">
-        @Html.DropDownList("Roles", ViewBag.Roles as IEnumerable<SelectListItem>)
+        @Html.LabelFor(model => model.Roles)
+        @Html.DropDownList("Role", ViewBag.Roles as IEnumerable<SelectListItem>)
     </div>
     <div class="form_group">
         <input type="submit" value="Сохранить" />

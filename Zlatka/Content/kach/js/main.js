@@ -243,17 +243,50 @@ window.onload = function () {
         }
 
         function saveProgram() {
-            localStorage.trainingProgramm = trainingsBlock.innerHTML;
-
             $.ajax({
                 url: '/Training/SaveTraining',
                 type: 'POST',
                 data: { content: trainingsBlock.innerHTML.replace(/</g, '&lt;') },
                 dataType: 'json',
-                success: function (result) {
-                    alert(trainingsBlock.innerHTML);
+                error: function () { console.error('Error!'); }
+            });
+
+            localStorage.trainingProgramm = trainingsBlock.innerHTML;
+        }
+
+        function loadProgram() {
+            if (localStorage.trainingProgramm !== undefined) {
+                trainingsBlock.innerHTML = localStorage.trainingProgramm;
+            }
+
+            $.ajax({
+                url: '/Training/LoadTraining',
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                    if(data != "") {
+                        trainingsBlock.innerHTML = data.replace(/(&lt;)/g, '<');
+                    }
+
+                    for (var i = 0; i < muscules.length; i++) {
+                        muscules[i].addEventListener('click', showExcercises);
+                        muscules[i].addEventListener('touchend', showExcercises);
+                    }
+
+                    for (var i = 0; i < droppable.length; i++) {
+                        trainings.push(droppable[i]);
+                    }
+
+                    for (var i = 0; i < document.getElementsByClassName('delete').length; i++) {
+                        document.getElementsByClassName('delete')[i].onclick = deleteExcersice
+                    }
+
+                    var sets = trainingsBlock.querySelectorAll('.sets');
+                    for (var i = 0; i < sets.length; i++) {
+                        sets[i].addEventListener('input', validateSets, false);
+                    }
                 },
-                error: function () { alert('Error!'); }
+                error: function () { console.error('Error!'); }
             });
         }
 
@@ -284,27 +317,7 @@ window.onload = function () {
             init: function () {
                 switcher.onclick = rotateBody;
                
-                if (localStorage.trainingProgramm !== undefined) {
-                    trainingsBlock.innerHTML = localStorage.trainingProgramm;
-                }
-                
-                for (var i = 0; i < muscules.length; i++) {
-                    muscules[i].addEventListener('click', showExcercises);
-                    muscules[i].addEventListener('touchend', showExcercises);
-                }
-
-                for (var i = 0; i < droppable.length; i++) {
-                    trainings.push(droppable[i]);
-                }
-
-                for (var i = 0; i < document.getElementsByClassName('delete').length; i++) {
-                    document.getElementsByClassName('delete')[i].onclick = deleteExcersice
-                }
-
-                var sets = trainingsBlock.querySelectorAll('.sets');
-                for (var i = 0; i < sets.length; i++) {
-                    sets[i].addEventListener('input', validateSets, false);
-                }
+                loadProgram();
 
                 infoClose.onclick = function (e) {
                     e.preventDefault();

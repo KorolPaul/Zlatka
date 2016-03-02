@@ -24,20 +24,39 @@ namespace Zlatka.Controllers
         }
 
         [HttpPost]
-        public JsonResult LoadTraining(string content)
+        public JsonResult LoadTraining()
         {
-            Training training = new Training { Content = content };
-            db.Trainings.Add(training);
-            db.SaveChanges();
-            return Json("Saved");
+            string userId = this.User.Identity.GetUserId();
+            int trainingId = (from t in db.Trainings where t.UserId == userId select t.id).FirstOrDefault();
+            
+            if(trainingId != 0)
+            {
+                Training training = db.Trainings.Find(trainingId);
+                return Json(training.Content);
+            }
+            return Json("");
         }
 
         [HttpPost]
         public JsonResult SaveTraining(string content)
         {
-            Training training = new Training {  Content = content };
-            db.Trainings.Add(training);
+            string userId = this.User.Identity.GetUserId();
+
+            if(userId == null)
+            {
+                return Json("Can't save. User is not logined.");
+            }
+            
+            int trainingId = (from t in db.Trainings where t.UserId == userId select t.id).FirstOrDefault();
+
+            if(trainingId != 0) {
+                db.Trainings.Find(trainingId).Content = content;
+            } else {
+                Training training = new Training { Content = content, UserId = userId };
+                db.Trainings.Add(training);
+            }
             db.SaveChanges();
+
             return Json("Saved");
         }
 

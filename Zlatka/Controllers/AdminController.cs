@@ -13,7 +13,7 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace Zlatka.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private AdminContext db = new AdminContext();
@@ -28,6 +28,7 @@ namespace Zlatka.Controllers
         {
             return View(db.Articles.ToList());
         }
+
         public ActionResult AddArticle()
         {
             ViewBag.CategoryID = SelectCategories();
@@ -106,6 +107,7 @@ namespace Zlatka.Controllers
         {
             return View(db.Categories.ToList());
         }
+
         public ActionResult AddCategory()
         {
             return View();
@@ -293,13 +295,16 @@ namespace Zlatka.Controllers
 
         public ActionResult EditUser(string id)
         {
-            var user = appdb.Users.Find(id);
-            var account = new AccountController(HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>());
-            var r = user.Roles.FirstOrDefault().RoleId;
+            ApplicationUser user = appdb.Users.Find(id);
+            var userRole = user.Roles.FirstOrDefault();
+            var userRoleId = "";
 
-            var t = user.Roles.FirstOrDefault().RoleId;
+            if(userRole != null)
+            {
+                userRoleId = appdb.Roles.Find(userRole.RoleId).Id;
+            }
 
-            SelectList list = new SelectList(appdb.Roles.ToList(), "Id", "Name", "b6b07703-f763-400a-9020-65d91e17a32f");
+            SelectList list = new SelectList(appdb.Roles.ToList(), "Id", "Name", userRole);
             ViewBag.Roles = list;
 
             return View(user);
@@ -312,7 +317,7 @@ namespace Zlatka.Controllers
             {
                 appdb.Entry(user).Entity.UserName = user.Email;
                 var account = new AccountController(HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>());
-                var role = appdb.Roles.Find(collection["Roles"]);
+                var role = appdb.Roles.Find(collection["Role"]);
 
                 if(!account.UserManager.IsInRole(user.Id, role.Name)) {
                     if (account.UserManager.GetRoles(user.Id).Count > 0)

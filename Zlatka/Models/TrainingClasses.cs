@@ -10,7 +10,6 @@ namespace Zlatka.Models
         public int id { get; set; }
         [AllowHtml]
         public string Content  { get; set; }
-        public object ApplicationUserID { get; set; }
-        //public virtual ApplicationUser ApplicationUser { get; set; }
+        public string UserId { get; set; }
     }
 }

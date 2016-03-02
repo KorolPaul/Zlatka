@@ -50,6 +50,6 @@ C:\Users\p_korol\Documents\Visual Studio 2013\Projects\Zlatka\Zlatka\bin\System.
 C:\Users\p_korol\Documents\Visual Studio 2013\Projects\Zlatka\Zlatka\bin\System.Web.WebPages.Deployment.xml
 C:\Users\p_korol\Documents\Visual Studio 2013\Projects\Zlatka\Zlatka\bin\System.Web.WebPages.Razor.xml
 C:\Users\p_korol\Documents\Visual Studio 2013\Projects\Zlatka\Zlatka\bin\System.Web.Optimization.xml
-C:\Users\p_korol\Documents\Visual Studio 2013\Projects\Zlatka\Zlatka\obj\Debug\Zlatka.csprojResolveAssemblyReference.cache
 C:\Users\p_korol\Documents\Visual Studio 2013\Projects\Zlatka\Zlatka\obj\Debug\Zlatka.dll
 C:\Users\p_korol\Documents\Visual Studio 2013\Projects\Zlatka\Zlatka\obj\Debug\Zlatka.pdb
+C:\Users\p_korol\Documents\Visual Studio 2013\Projects\Zlatka\Zlatka\obj\Debug\Zlatka.csprojResolveAssemblyReference.cache
