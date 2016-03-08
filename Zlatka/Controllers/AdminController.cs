@@ -13,7 +13,7 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace Zlatka.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private AdminContext db = new AdminContext();
