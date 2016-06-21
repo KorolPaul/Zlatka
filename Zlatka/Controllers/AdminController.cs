@@ -13,14 +13,22 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace Zlatka.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "User")]
     public class AdminController : Controller
     {
         private AdminContext db = new AdminContext();
         private ApplicationDbContext appdb = new ApplicationDbContext();
+
         public ActionResult Index()
         {
-            return View();
+            Roles.CreateRole("members");
+            Roles.AddUserToRole("test3@gmail.com", "members");
+            var role = User.IsInRole("members");
+            if (User.IsInRole("User"))
+            {
+                return View();
+            }
+            return RedirectToAction("Index");
         }
 
         #region Articles
