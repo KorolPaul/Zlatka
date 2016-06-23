@@ -5,8 +5,6 @@ window.onload = function () {
             dragExcerciseNext,
             mouseOffset,
             trainings = [],
-            timerShow = 0,
-            timerHide = 0,
             xml, 
             info = document.getElementById('info'),
             infoClose = document.getElementById('info_close'),
@@ -16,7 +14,6 @@ window.onload = function () {
             shedule = document.getElementById('shedule'),
             muscules = document.getElementsByTagName('g'),
             excercises = document.getElementById('excercises'), 
-            switcher = document.getElementById('muscles_switcher'), 
             isInfoShown = false;
 
         function fixEvent(e) {
@@ -67,12 +64,7 @@ window.onload = function () {
                 excercise.innerHTML = html[i].innerHTML;
                 excercise.dataset['complexity'] = html[i].getAttribute('data-complexity');
 
-                excercise.addEventListener('mouseenter', showInfo);
                 excercise.addEventListener('click', showInfo);
-                excercise.addEventListener('mouseleave', function () {
-                    clearTimeout(timerShow);
-                    info.nextElementSibling.classList.remove('info__focus');
-                });
                 excercise.addEventListener('mousedown', moveExcerciseStart);
                 excercise.addEventListener('touchstart', moveExcerciseStart);
 
@@ -203,7 +195,6 @@ window.onload = function () {
             var html = this.innerHTML;
 
             if (isInfoShown) {
-                clearTimeout(timerShow);
                 hideInfo();
             } else {
                 isInfoShown = true;
@@ -211,12 +202,8 @@ window.onload = function () {
                 info.querySelector('.info_content').innerHTML = html;
             }
             
-            timerShow = setTimeout(function () {
-                clearTimeout(timerHide);
-                info.querySelector('.info_content').innerHTML = html;
-                info.nextElementSibling.classList.remove('visible');
-                setTimeout(function () { info.nextElementSibling.classList.remove('info__focus'); }, 300);
-            }, 300);
+            info.querySelector('.info_content').innerHTML = html;
+            info.nextElementSibling.classList.remove('visible');
         }
 
         function hideInfo(e) {
@@ -315,7 +302,6 @@ window.onload = function () {
 
         return {
             init: function () {
-                switcher.onclick = rotateBody;
                
                 loadProgram();
 
